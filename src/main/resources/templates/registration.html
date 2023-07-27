@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:lang="http://www.tymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration</title>
+</head>
+<body>
+
+<form th:method="POST" th:action="@{/auth/registration}" th:object="${user}">
+    <label for="username">Enter username: </label>
+    <input type="text" th:field="*{userName}" id="username"/>
+    <br/>
+    <br/>
+    <label for="lastName">Enter lastName: </label>
+    <input type="text" th:field="*{lastName}" id="lastName"/>
+    <br/>
+    <br/>
+    <label for="pass">Enter password: </label>
+    <input type="text" th:field="*{password}" id="pass"/>
+    <br/>
+    <br/>
+    <label for="age">Enter age: </label>
+    <input type="text" th:field="*{age}" id="age"/>
+    <br/>
+    <br/>
+    <input type="submit" value="Sign up!"/>
+</form>
+
+<br/>
+<br/>
+<hr/>
+<a href="/logout">Logout</a>
+
+</body>
+</html>

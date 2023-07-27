@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:lang="http://www.tymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit users</title>
+</head>
+<body>
+
+
+<form th:method="PATCH" th:action="@{/users/{id}(id=${user.getId()})}" th:object="${user}">
+  <label for="pass">Enter new password: </label>
+  <input type="text" th:field="*{password}" id="pass"/>
+  <br/>
+  <br/>
+  <label for="name">Enter name: </label>
+  <input type="text" th:field="*{name}" id="name"/>
+  <br/>
+  <br/>
+  <label for="lastName">Enter lastName: </label>
+  <input type="text" th:field="*{lastName}" id="lastName"/>
+  <br/>
+  <br/>
+  <label for="age">Enter age: </label>
+  <input type="text" th:field="*{age}" id="age"/>
+  <br/>
+  <br/>
+  <label for="role">Enter role: </label>
+  <input type="text" th:field="*{role}" id="role"/>
+  <br/>
+  <br/>
+  <input type="submit" value="Update"/>
+</form>
+
+<br/>
+<br/>
+<hr/>
+<a href="/logout">Logout</a>
+
+</body>
+</html>
