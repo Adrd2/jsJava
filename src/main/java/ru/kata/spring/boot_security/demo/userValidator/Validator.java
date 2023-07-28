@@ -29,7 +29,7 @@ public class Validator implements org.springframework.validation.Validator {
     public void validate(Object target, Errors errors) {
         User user = (User) target;
         try {
-            securityUserService.loadUserByUsername(user.getUserName());
+            securityUserService.loadUserByUsername(user.getName());
         } catch (UsernameNotFoundException e) {
             return; // обратная проверка, при ошибке - все ок
         }

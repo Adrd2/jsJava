@@ -29,6 +29,29 @@ public class User {
     @Column(name="password")
     private String password;
 
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST})
+    @JoinTable(
+            name = "usersRoles"
+            , joinColumns = @JoinColumn(name = "users_id")
+            , inverseJoinColumns = @JoinColumn(name = "roles_id")
+    )
+    private List<Roles> roles;
+
+    public void AddRolesToUser(Roles role) {
+        if (roles == null) {
+            roles = new ArrayList<>();
+        }
+        roles.add(role);
+    }
+
+    public List<Roles> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Roles> roles) {
+        this.roles = roles;
+    }
+
     public String getPassword() {
         return password;
     }
@@ -78,14 +101,6 @@ public class User {
         this.userName = name;
         this.lastName = lastName;
         this.age = age;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
     }
 
     public String getRole() {

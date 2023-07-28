@@ -3,6 +3,7 @@ package ru.kata.spring.boot_security.demo.configs;
 import ch.qos.logback.core.joran.action.NOPAction;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -38,17 +39,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/users/", "/users/new").hasRole("admin")
+                .antMatchers("/admin/**").hasRole("admin")
+                .antMatchers("user/**").hasAnyRole("admin", "user")
                 .antMatchers("/", "/error", "/auth/registration").permitAll()
                 .anyRequest().hasAnyRole("user", "admin")
                 .and()
                 .formLogin().successHandler(successUserHandler)
-                .defaultSuccessUrl("/users/", true)
                 .permitAll()
                 .and()
                 .logout().logoutUrl("/logout").logoutSuccessUrl("/")
                 .permitAll();
+
     }
+
 
     // аутентификация inMemory
     @Bean

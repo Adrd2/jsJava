@@ -1,10 +1,12 @@
 package ru.kata.spring.boot_security.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.repositories.UserDao;
 
+import java.security.Principal;
 import java.util.List;
 
 @Service
@@ -37,4 +39,12 @@ public class UserService {
         userDao.delete(id);
     }
 
+
+    public User loadUserByUsername(Principal principal) throws UsernameNotFoundException {
+        User user = userDao.getUserByName(principal.getName());
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found");
+        }
+        return user;
+    }
 }
