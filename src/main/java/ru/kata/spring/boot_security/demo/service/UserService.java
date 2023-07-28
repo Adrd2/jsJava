@@ -31,8 +31,12 @@ public class UserService {
         userDao.save(user);
     }
 
-    public void update(int id, User user) {
-        userDao.update(id, user);
+    public void updateForAdmin(int id, User user) {
+        userDao.updateForAdmin(id, user);
+    }
+
+    public void updateForUser(int id, User user) {
+        userDao.updateForUser(id, user);
     }
 
     public void delete(int id) {
@@ -42,6 +46,7 @@ public class UserService {
 
     public User loadUserByUsername(Principal principal) throws UsernameNotFoundException {
         User user = userDao.getUserByName(principal.getName());
+        System.out.println("getUserByName in SERVICE COMPLITE");
         if (user == null) {
             throw new UsernameNotFoundException("User not found");
         }

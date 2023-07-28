@@ -126,5 +126,12 @@ public class User {
         return "This user number " + id + " is " + userName + " " + lastName + ", " + age + " years old";
     }
 
+    public String showByName() {
+        return "Name: " + userName + lastName + ", '\'" +
+                "age" + age + ", '\'" +
+                "password" + password + ", '\'" +
+                "role" + role;
+    }
+
 
 }

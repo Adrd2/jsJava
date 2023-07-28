@@ -105,7 +105,7 @@ public class UserDao {
             }
         }
 
-        public void update(int id, User user) {
+        public void updateForAdmin(int id, User user) {
             try {
                 PreparedStatement preparedStatement =
                         connection.prepareStatement(
@@ -116,6 +116,26 @@ public class UserDao {
                 preparedStatement.setInt(3, user.getAge());
                 preparedStatement.setString(4, user.getPassword());
                 preparedStatement.setString(5, user.getRole());
+                preparedStatement.setInt(6, id);
+
+                preparedStatement.executeUpdate();
+
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        public void updateForUser(int id, User user) {
+            try {
+                PreparedStatement preparedStatement =
+                        connection.prepareStatement(
+                                "UPDATE users SET name=?, lastname=?, age=?, password=?, role=? WHERE id=?");
+
+                preparedStatement.setString(1, user.getName());
+                preparedStatement.setString(2, user.getLastName());
+                preparedStatement.setInt(3, user.getAge());
+                preparedStatement.setString(4, user.getPassword());
+                preparedStatement.setString(5, "ROLE_user");
                 preparedStatement.setInt(6, id);
 
                 preparedStatement.executeUpdate();
@@ -142,27 +162,29 @@ public class UserDao {
         }
 
         public User getUserByName(String name) {
-            PreparedStatement preparedStatement = null;
+            PreparedStatement preparedStatement;
             User user;
             try {
                 preparedStatement = connection.prepareStatement(
                         "SELECT * FROM users WHERE name=?;"
                 );
+                System.out.println(name);
                 preparedStatement.setString(1, name);
 
                 user = new User();
 
                 ResultSet rs = preparedStatement.executeQuery();
 
-                System.out.println(rs);
+                rs.next();
 
-                user.setId(rs.getInt(1));
+                user.setId(rs.getInt("id"));
                 user.setName(rs.getString("name"));
                 user.setLastName(rs.getString("lastname"));
                 user.setAge(rs.getInt("age"));
                 user.setPassword(rs.getString("password"));
                 user.setPassword(rs.getString("role"));
 
+                System.out.println("getUserByName in DAO COMPLITE");
 
             } catch (SQLException e) {
                 throw new RuntimeException(e);

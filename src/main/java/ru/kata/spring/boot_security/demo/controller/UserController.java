@@ -24,33 +24,20 @@ public class UserController {
     }
 
 
-//    @GetMapping("/{id}")
-//    public String showById(@PathVariable("id") int id, Model modelMap) {
-//        System.out.println("SHOW BY ID");
-//        modelMap.addAttribute("user", userService.showByID(id));
-//        return "show";
-//    }
 
     @GetMapping("/{id}/edit")
     public String edit(Model modelMap, @PathVariable("id") int id) {
         System.out.println("EDIT");
         modelMap.addAttribute("user", userService.showByID(id));
         System.out.println("EDITCOMPLITE");
-        return "edit";
+        return "users/editForUSER";
     }
 
     @PatchMapping("/{id}")
     public String update (@ModelAttribute("user") User user, @PathVariable("id") int id) {
-        userService.update(id, user);
+        userService.updateForUser(id, user);
         System.out.println("updatecom");
-        return "redirect:/";
-    }
-
-    @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") int id) {
-        userService.delete(id);
-        System.out.println("deletecom");
-        return "redirect:/";
+        return "redirect:/user/";
     }
 
     @GetMapping("/")
@@ -59,6 +46,8 @@ public class UserController {
 
         model.addAttribute("user", user);
 
-        return "show";
+        System.out.println("getUserByName in CONTROLLER COMPLITE");
+
+        return "users/show";
     }
 }
