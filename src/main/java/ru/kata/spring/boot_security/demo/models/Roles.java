@@ -1,5 +1,6 @@
 package ru.kata.spring.boot_security.demo.models;
 
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.parameters.P;
 
 import javax.persistence.*;
@@ -8,7 +9,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "roles")
-public class Roles {
+public class Roles implements GrantedAuthority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,29 +18,6 @@ public class Roles {
 
     @Column(name = "name", unique = true)
     private String name;
-
-
-    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST})
-    @JoinTable(
-            name = "usersRoles"
-            , joinColumns = @JoinColumn(name = "roles_id")
-            , inverseJoinColumns = @JoinColumn(name = "users_id")
-    )
-    private List<User> users;
-
-    public void addUsersToRoles(User user) {
-        if (users == null) {
-            users = new ArrayList<>();
-        }
-        users.add(user);
-    }
-    public List<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<User> users) {
-        this.users = users;
-    }
 
     public int getId() {
         return id;
@@ -66,14 +44,15 @@ public class Roles {
 
     @Override
     public String toString() {
-        return "Roles{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
+        return getName();
     }
 
-    public String getDefault() {
-        return "ROLE_user";
+    public Roles getDefault() {
+        return new Roles("ROLE_user");
     }
 
+    @Override
+    public String getAuthority() {
+        return getName();
+    }
 }

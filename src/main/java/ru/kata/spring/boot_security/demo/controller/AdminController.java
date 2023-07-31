@@ -6,7 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.models.User;
-import ru.kata.spring.boot_security.demo.repositories.RolesDAO;
+import ru.kata.spring.boot_security.demo.DAO.RolesDAO;
+import ru.kata.spring.boot_security.demo.repositories.SecurityUserRepository;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 
@@ -15,11 +16,14 @@ import ru.kata.spring.boot_security.demo.service.UserService;
 @RequestMapping("/admin")
 public class AdminController {
 
+    private final SecurityUserRepository securityUserRepository;
+
     private final UserService userService;
     private final RolesDAO rolesDAO;
 
     @Autowired
-    public AdminController(UserService userService, RolesDAO rolesDAO) {
+    public AdminController(SecurityUserRepository securityUserRepository, UserService userService, RolesDAO rolesDAO) {
+        this.securityUserRepository = securityUserRepository;
         this.userService = userService;
         this.rolesDAO = rolesDAO;
     }
@@ -41,12 +45,15 @@ public class AdminController {
     public String newUser(Model modelMap) {
         System.out.println("NEW USER");
         modelMap.addAttribute("user", new User());
+        System.out.println("NEW USER AGAIN");
         return "admin/new";
     }
 
     @PostMapping()
     public String createNewUser(@ModelAttribute("user") User user) {
-        userService.save(user);
+//        userService.save(user);
+        securityUserRepository.save(user);
+        System.out.println("ROLE in createNewUser in Controller - " + user.getRoles());
         return "redirect:/admin/";
     }
 
@@ -60,7 +67,7 @@ public class AdminController {
 
     @PatchMapping("/{id}")
     public String update (@ModelAttribute("user") User user, @PathVariable("id") int id) {
-        userService.updateForAdmin(id, user);
+        securityUserRepository.save(user);
         System.out.println("updatecom");
         return "redirect:/admin/";
     }

@@ -20,12 +20,12 @@ public class SecurityUserService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
-        Optional<User> user = securityUserRepository.findByUserName(name);
-
-        if(user.isEmpty()) {
-            throw new UsernameNotFoundException("User not found!");
+    public UserDetails loadUserByUsername(String name) {
+        System.out.println("loadUserByUsername " + name);
+        User user = securityUserRepository.findByUsername(name);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found");
         }
-        return new UserDetailsSecurity(user.get());
+        return user;
     }
 }

@@ -1,10 +1,9 @@
-package ru.kata.spring.boot_security.demo.repositories;
+package ru.kata.spring.boot_security.demo.DAO;
 
 import org.springframework.stereotype.Component;
+import ru.kata.spring.boot_security.demo.models.Roles;
 import ru.kata.spring.boot_security.demo.models.User;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.sql.*;
 import java.util.*;
 
@@ -15,8 +14,8 @@ public class UserDao {
         private static String account = "root";
         private static String password = "827193++";
         private static Connection connection;
-        @PersistenceContext
-        private EntityManager entityManager;
+        String disable = "SET FOREIGN_KEY_CHECKS=0;";
+        String activate = "SET FOREIGN_KEY_CHECKS=0;";
 
 
         static {
@@ -44,7 +43,6 @@ public class UserDao {
                     user.setName(resultSet.getString("name"));
                     user.setLastName(resultSet.getString("lastname"));
                     user.setAge(resultSet.getInt("age"));
-                    user.setRole(resultSet.getString("role"));
                     user.setPassword(resultSet.getString("password"));
 
                     userList.add(user);
@@ -76,7 +74,6 @@ public class UserDao {
                 user.setLastName(rs.getString("lastname"));
                 user.setAge(rs.getInt("age"));
                 user.setPassword(rs.getString("password"));
-                user.setRole(rs.getString("role"));
 
             } catch (SQLException e) {
                 throw new RuntimeException(e);
@@ -88,14 +85,16 @@ public class UserDao {
         public void save(User user) {
             try {
                 PreparedStatement preparedStatement =
-                        connection.prepareStatement("INSERT INTO users VALUES(?,?,?,?,?,?)");
+                        connection.prepareStatement("INSERT INTO users VALUES(?,?,?,?,?)");
 
                 preparedStatement.setLong(1, user.getId());
                 preparedStatement.setString(2, user.getName());
                 preparedStatement.setString(3, user.getLastName());
                 preparedStatement.setInt(4, user.getAge());
                 preparedStatement.setString(5, user.getPassword());
-                preparedStatement.setString(6, user.getRole());
+
+                System.out.println(user.getRoles() + "THIS IS getRoles in save in DAO");
+                user.AddRolesToUser(user.getRoles());
 
 
                 preparedStatement.executeUpdate();
@@ -109,14 +108,16 @@ public class UserDao {
             try {
                 PreparedStatement preparedStatement =
                         connection.prepareStatement(
-                                "UPDATE users SET name=?, lastname=?, age=?, password=?, role=? WHERE id=?");
+                                "UPDATE users SET name=?, lastname=?, age=?, password=? WHERE id=?");
 
                 preparedStatement.setString(1, user.getName());
                 preparedStatement.setString(2, user.getLastName());
                 preparedStatement.setInt(3, user.getAge());
                 preparedStatement.setString(4, user.getPassword());
-                preparedStatement.setString(5, user.getRole());
-                preparedStatement.setInt(6, id);
+                preparedStatement.setInt(5, id);
+
+                System.out.println(user.getRoles() + "THIS IS getRoles in updateForAdmin in DAO and toString Role" + new Roles().toString());
+                user.setRoles(user.getRoles());
 
                 preparedStatement.executeUpdate();
 
@@ -129,14 +130,13 @@ public class UserDao {
             try {
                 PreparedStatement preparedStatement =
                         connection.prepareStatement(
-                                "UPDATE users SET name=?, lastname=?, age=?, password=?, role=? WHERE id=?");
+                                "UPDATE users SET name=?, lastname=?, age=?, password=? WHERE id=?");
 
                 preparedStatement.setString(1, user.getName());
                 preparedStatement.setString(2, user.getLastName());
                 preparedStatement.setInt(3, user.getAge());
                 preparedStatement.setString(4, user.getPassword());
-                preparedStatement.setString(5, "ROLE_user");
-                preparedStatement.setInt(6, id);
+                preparedStatement.setInt(5, id);
 
                 preparedStatement.executeUpdate();
 
@@ -146,16 +146,24 @@ public class UserDao {
         }
 
         public void delete(int id) {
+            String diactivate = "SET FOREIGN_KEY_CHECKS=OFF;";
+            String activate = "SET FOREIGN_KEY_CHECKS=ON;";
             PreparedStatement preparedStatement = null;
+            PreparedStatement prDiactivate = null;
+            PreparedStatement prActivate = null;
             try {
                 preparedStatement = connection.prepareStatement(
                         "DELETE FROM users WHERE id=?"
                 );
+                prDiactivate = connection.prepareStatement(diactivate);
+                prDiactivate.execute();
 
                 preparedStatement.setInt(1, id);
 
                 preparedStatement.executeUpdate();
 
+                prActivate = connection.prepareStatement(diactivate);
+                prActivate.execute();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -168,21 +176,22 @@ public class UserDao {
                 preparedStatement = connection.prepareStatement(
                         "SELECT * FROM users WHERE name=?;"
                 );
-                System.out.println(name);
                 preparedStatement.setString(1, name);
 
                 user = new User();
 
                 ResultSet rs = preparedStatement.executeQuery();
-
+                System.out.println(rs);
+                System.out.println("RESULT SET NAME " + name);
                 rs.next();
+                System.out.println("ResultSet is started");
+
 
                 user.setId(rs.getInt("id"));
                 user.setName(rs.getString("name"));
                 user.setLastName(rs.getString("lastname"));
                 user.setAge(rs.getInt("age"));
                 user.setPassword(rs.getString("password"));
-                user.setPassword(rs.getString("role"));
 
                 System.out.println("getUserByName in DAO COMPLITE");
 

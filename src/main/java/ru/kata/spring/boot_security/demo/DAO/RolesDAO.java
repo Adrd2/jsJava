@@ -1,4 +1,4 @@
-package ru.kata.spring.boot_security.demo.repositories;
+package ru.kata.spring.boot_security.demo.DAO;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

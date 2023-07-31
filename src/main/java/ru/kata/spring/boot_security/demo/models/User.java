@@ -1,13 +1,15 @@
 package ru.kata.spring.boot_security.demo.models;
 
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name="users")
-public class User {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,13 +17,10 @@ public class User {
     private long id;
 
     @Column(name = "name")
-    private String userName;
+    private String username;
 
     @Column(name = "lastname")
     private String lastName;
-
-    @Column(name = "role")
-    private String role;
 
     @Column(name = "age")
     private int age;
@@ -29,31 +28,63 @@ public class User {
     @Column(name="password")
     private String password;
 
-    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST})
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "usersRoles"
             , joinColumns = @JoinColumn(name = "users_id")
             , inverseJoinColumns = @JoinColumn(name = "roles_id")
     )
-    private List<Roles> roles;
+    private Set<Roles> roles;
 
-    public void AddRolesToUser(Roles role) {
+    public void AddRolesToUser(Set<Roles> role) {
         if (roles == null) {
-            roles = new ArrayList<>();
+            roles = new HashSet<>();
         }
-        roles.add(role);
+        roles.addAll(role);
+        System.out.println(roles.toString() + " ROLES IN ADD ROLES TO USER ");
     }
 
-    public List<Roles> getRoles() {
+    public Set<Roles> getRoles() {
+        System.out.println("getroles = " + roles);
         return roles;
     }
 
-    public void setRoles(List<Roles> roles) {
+    public void setRoles(Set<Roles> roles) {
         this.roles = roles;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return getRoles();
     }
 
     public String getPassword() {
         return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
     public void setPassword(String password) {
@@ -69,11 +100,11 @@ public class User {
     }
 
     public String getName() {
-        return userName;
+        return username;
     }
 
     public void setName(String name) {
-        this.userName = name;
+        this.username = name;
     }
 
     public String getLastName() {
@@ -98,39 +129,31 @@ public class User {
     public User(String password, int id, String name, String lastName, int age) {
         this.password = password;
         this.id = id;
-        this.userName = name;
+        this.username = name;
         this.lastName = lastName;
         this.age = age;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = "ROLE_" + role;
     }
 
     @Override
     public String toString() {
         return "User " +
-                ", name " + userName
+                ", name " + username
                 + " " + lastName +
                 "age - " + age;
     }
 
     public String getFullName() {
-        return userName + " " + lastName;
+        return username + " " + lastName;
     }
     public String showByID() {
-        return "This user number " + id + " is " + userName + " " + lastName + ", " + age + " years old";
+        return "This user number " + id + " is " + username + " " + lastName + ", " + age + " years old";
     }
 
     public String showByName() {
-        return "Name: " + userName + lastName + ", '\'" +
+        return "Name: " + username + lastName + ", '\'" +
                 "age" + age + ", '\'" +
                 "password" + password + ", '\'" +
-                "role" + role;
+                "role" + getRoles();
     }
 
 

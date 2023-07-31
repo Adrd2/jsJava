@@ -8,12 +8,12 @@
 
 
 <form th:method="PATCH" th:action="@{/user/{id}(id=${user.getId()})}" th:object="${user}">
+  <label for="usnm">Enter UserName: </label>
+  <input type="text" th:field="*{name}" id="usnm"/>
+  <br/>
+  <br/>
   <label for="pass">Enter new password: </label>
   <input type="text" th:field="*{password}" id="pass"/>
-  <br/>
-  <br/>
-  <label for="name">Enter name: </label>
-  <input type="text" th:field="*{name}" id="name"/>
   <br/>
   <br/>
   <label for="lastName">Enter lastName: </label>

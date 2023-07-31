@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.kata.spring.boot_security.demo.models.User;
-import ru.kata.spring.boot_security.demo.repositories.UserDao;
+import ru.kata.spring.boot_security.demo.DAO.UserDao;
 
 import java.security.Principal;
 import java.util.List;
@@ -45,6 +45,7 @@ public class UserService {
 
 
     public User loadUserByUsername(Principal principal) throws UsernameNotFoundException {
+        System.out.println("PRINCIPAL GET NAME " + principal.getName());
         User user = userDao.getUserByName(principal.getName());
         System.out.println("getUserByName in SERVICE COMPLITE");
         if (user == null) {
