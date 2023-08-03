@@ -26,7 +26,7 @@ public class RegController {
 
 
     @GetMapping("/registration")
-    public String registrationPage (@ModelAttribute("user") User user) {
+    public String registrationPage(@ModelAttribute("user") User user) {
         return "registration";
     }
 
@@ -37,7 +37,7 @@ public class RegController {
         registrationService.register(user);
 
 
-        if(bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             return "/auth/registration";
         }
 

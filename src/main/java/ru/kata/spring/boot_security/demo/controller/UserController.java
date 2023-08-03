@@ -15,18 +15,15 @@ import java.security.Principal;
 public class UserController {
 
     private final UserService userService;
-    private final RolesDAO rolesDAO;
 
     @Autowired
-    public UserController(UserService userService, RolesDAO rolesDAO) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.rolesDAO = rolesDAO;
     }
 
 
-
     @GetMapping("/{id}/edit")
-    public String edit(Model modelMap, @PathVariable("id") int id) {
+    public String edit(Model modelMap, @PathVariable("id") Long id) {
         System.out.println("EDIT");
         modelMap.addAttribute("user", userService.showByID(id));
         System.out.println("EDITCOMPLITE");
@@ -34,7 +31,7 @@ public class UserController {
     }
 
     @PatchMapping("/{id}")
-    public String update (@ModelAttribute("user") User user, @PathVariable("id") int id) {
+    public String update(@ModelAttribute("user") User user, @PathVariable("id") int id) {
         userService.updateForUser(id, user);
         System.out.println("updatecom");
         return "redirect:/user/";

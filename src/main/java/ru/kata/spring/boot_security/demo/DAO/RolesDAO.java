@@ -1,18 +1,14 @@
 package ru.kata.spring.boot_security.demo.DAO;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import ru.kata.spring.boot_security.demo.models.Roles;
-import ru.kata.spring.boot_security.demo.models.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -32,8 +28,6 @@ public class RolesDAO {
     private static String password = "827193++";
 
     private static Connection connection;
-
-
 
 
     static {
@@ -62,7 +56,7 @@ public class RolesDAO {
     }
 
     public List<Roles> listAllRoles() {
-        return  entityManager.createQuery("from roles", Roles.class
+        return entityManager.createQuery("from roles", Roles.class
         ).getResultList();
     }
 

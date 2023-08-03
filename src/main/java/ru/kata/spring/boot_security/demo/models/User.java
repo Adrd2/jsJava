@@ -8,24 +8,21 @@ import javax.persistence.*;
 import java.util.*;
 
 @Entity
-@Table(name="users")
+@Table(name = "users")
 public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private long id;
 
     @Column(name = "name")
     private String username;
 
-    @Column(name = "lastname")
+    @Column(name = "lastname") // без @Column будет поиск столбца last_name из-за регистра - N
     private String lastName;
 
-    @Column(name = "age")
     private int age;
 
-    @Column(name="password")
     private String password;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -145,6 +142,7 @@ public class User implements UserDetails {
     public String getFullName() {
         return username + " " + lastName;
     }
+
     public String showByID() {
         return "This user number " + id + " is " + username + " " + lastName + ", " + age + " years old";
     }

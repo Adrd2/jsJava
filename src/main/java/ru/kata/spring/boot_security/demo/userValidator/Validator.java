@@ -18,8 +18,6 @@ public class Validator implements org.springframework.validation.Validator {
     }
 
 
-
-
     @Override
     public boolean supports(Class<?> clazz) {
         return User.class.equals(clazz);

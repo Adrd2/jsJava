@@ -7,25 +7,19 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.DAO.RolesDAO;
-import ru.kata.spring.boot_security.demo.repositories.SecurityUserRepository;
 import ru.kata.spring.boot_security.demo.service.UserService;
-
 
 
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
 
-    private final SecurityUserRepository securityUserRepository;
 
     private final UserService userService;
-    private final RolesDAO rolesDAO;
 
     @Autowired
-    public AdminController(SecurityUserRepository securityUserRepository, UserService userService, RolesDAO rolesDAO) {
-        this.securityUserRepository = securityUserRepository;
+    public AdminController(UserService userService) {
         this.userService = userService;
-        this.rolesDAO = rolesDAO;
     }
 
     @GetMapping(value = "/")
@@ -35,7 +29,7 @@ public class AdminController {
     }
 
     @GetMapping("/{id}")
-    public String showById(@PathVariable("id") int id, Model modelMap) {
+    public String showById(@PathVariable("id") Long id, Model modelMap) {
         System.out.println("SHOW BY ID");
         modelMap.addAttribute("user", userService.showByID(id));
         return "admin/showForADMIN";
@@ -51,14 +45,13 @@ public class AdminController {
 
     @PostMapping()
     public String createNewUser(@ModelAttribute("user") User user) {
-//        userService.save(user);
-        securityUserRepository.save(user);
+        userService.save(user);
         System.out.println("ROLE in createNewUser in Controller - " + user.getRoles());
         return "redirect:/admin/";
     }
 
     @GetMapping("/{id}/edit")
-    public String edit(Model modelMap, @PathVariable("id") int id) {
+    public String edit(Model modelMap, @PathVariable("id") Long id) {
         System.out.println("EDIT");
         modelMap.addAttribute("user", userService.showByID(id));
         System.out.println("EDITCOMPLITE");
@@ -66,14 +59,14 @@ public class AdminController {
     }
 
     @PatchMapping("/{id}")
-    public String update (@ModelAttribute("user") User user, @PathVariable("id") int id) {
-        securityUserRepository.save(user);
+    public String update(@ModelAttribute("user") User user, @PathVariable("id") int id) {
+        userService.updateForAdmin(user);
         System.out.println("updatecom");
         return "redirect:/admin/";
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") int id) {
+    public String delete(@PathVariable("id") Long id) {
         userService.delete(id);
         System.out.println("deletecom");
         return "redirect:/admin/";

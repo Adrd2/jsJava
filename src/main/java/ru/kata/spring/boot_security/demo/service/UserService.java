@@ -23,7 +23,7 @@ public class UserService {
         return userDao.getUser();
     }
 
-    public User showByID(int id) {
+    public User showByID(Long id) {
         return userDao.showByID(id);
     }
 
@@ -31,15 +31,15 @@ public class UserService {
         userDao.save(user);
     }
 
-    public void updateForAdmin(int id, User user) {
-        userDao.updateForAdmin(id, user);
+    public void updateForAdmin(User user) {
+        userDao.updateForAdmin(user);
     }
 
     public void updateForUser(int id, User user) {
-        userDao.updateForUser(id, user);
+        userDao.updateForUser(user);
     }
 
-    public void delete(int id) {
+    public void delete(Long id) {
         userDao.delete(id);
     }
 
