@@ -19,11 +19,11 @@ public class SuccessUserHandler implements AuthenticationSuccessHandler {
         if (roles.contains("ROLE_user")) {
             System.out.println("ROLE = USER");
             System.out.println(roles);
-            httpServletResponse.sendRedirect("/user/");
+            httpServletResponse.sendRedirect("/user");
         } else if (roles.contains("ROLE_admin")) {
             System.out.println("ROLE = ADMIN");
             System.out.println(roles);
-            httpServletResponse.sendRedirect("/admin/");
+            httpServletResponse.sendRedirect("/admin");
         } else {
             System.out.println("ROLE = NONE");
             System.out.println(roles);

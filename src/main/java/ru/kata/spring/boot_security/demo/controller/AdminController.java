@@ -2,74 +2,73 @@ package ru.kata.spring.boot_security.demo.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.models.User;
-import ru.kata.spring.boot_security.demo.DAO.RolesDAO;
+import ru.kata.spring.boot_security.demo.service.RolesService;
 import ru.kata.spring.boot_security.demo.service.UserService;
+
+import java.util.stream.Collectors;
 
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping
 public class AdminController {
 
 
     private final UserService userService;
+    private final RolesService rolesService;
 
     @Autowired
-    public AdminController(UserService userService) {
+    public AdminController(UserService userService, RolesService rolesService) {
         this.userService = userService;
+        this.rolesService = rolesService;
     }
 
-    @GetMapping(value = "/")
-    public String printUser(Model modelmap) {
-        modelmap.addAttribute("userMessages", userService.getUser());
-        return "admin/user";
+    @GetMapping(value = "/admin")
+    public String adminPage(@AuthenticationPrincipal User user, Model modelmap) {
+        modelmap.addAttribute("user", user);
+        modelmap.addAttribute("roles", rolesService.listAllRoles());
+        modelmap.addAttribute("users", userService.getUserList());
+        return "admin/MainPageAdmin";
     }
 
-    @GetMapping("/{id}")
-    public String showById(@PathVariable("id") Long id, Model modelMap) {
-        System.out.println("SHOW BY ID");
-        modelMap.addAttribute("user", userService.showByID(id));
-        return "admin/showForADMIN";
+    @GetMapping("/add")
+    public String newUserPage(@AuthenticationPrincipal User user,Model modelMap) {
+        System.out.println("Новый юзер вызов");
+        modelMap.addAttribute("user", user);
+        modelMap.addAttribute("roles", rolesService.listAllRoles());
+        return "admin/newUser";
     }
 
-    @GetMapping("/new")
-    public String newUser(Model modelMap) {
-        System.out.println("NEW USER");
-        modelMap.addAttribute("user", new User());
-        System.out.println("NEW USER AGAIN");
-        return "admin/new";
-    }
 
-    @PostMapping()
-    public String createNewUser(@ModelAttribute("user") User user) {
+    @PostMapping("/new")
+    public String createUser(@ModelAttribute("user") User user) {
+        getUserRoles(user);
         userService.save(user);
-        System.out.println("ROLE in createNewUser in Controller - " + user.getRoles());
-        return "redirect:/admin/";
+        return "redirect:/admin";
     }
 
-    @GetMapping("/{id}/edit")
-    public String edit(Model modelMap, @PathVariable("id") Long id) {
-        System.out.println("EDIT");
-        modelMap.addAttribute("user", userService.showByID(id));
-        System.out.println("EDITCOMPLITE");
-        return "admin/editForADMIN";
-    }
-
-    @PatchMapping("/{id}")
-    public String update(@ModelAttribute("user") User user, @PathVariable("id") int id) {
+    @PutMapping("/{id}/update")
+    public String update(@ModelAttribute("user") User user, Model model) {
+        model.addAttribute("roles", rolesService.listAllRoles());
+        getUserRoles(user);
         userService.updateForAdmin(user);
-        System.out.println("updatecom");
-        return "redirect:/admin/";
+        return "redirect:/admin";
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}/delete")
     public String delete(@PathVariable("id") Long id) {
         userService.delete(id);
-        System.out.println("deletecom");
         return "redirect:/admin/";
+    }
+
+    private void getUserRoles(User user) {
+        user.setRoles(user.getRoles().stream()
+                .map(role -> rolesService.getRole(role.getUserRole()))
+                .collect(Collectors.toSet()));
     }
 
 }

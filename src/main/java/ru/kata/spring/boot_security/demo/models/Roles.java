@@ -42,12 +42,13 @@ public class Roles implements GrantedAuthority {
         return getName();
     }
 
-    public Roles getDefault() {
-        return new Roles("ROLE_user");
-    }
 
     @Override
     public String getAuthority() {
         return getName();
+    }
+
+    public String getUserRole() {
+        return name;
     }
 }

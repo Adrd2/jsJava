@@ -14,15 +14,8 @@ import java.util.*;
 
 @Component
 public class UserDao {
-
-    private static String URL = "jdbc:mysql://localhost:3306/springbootDemo";
-    private static String account = "root";
-    private static String password = "827193++";
-
     @PersistenceContext
     private EntityManager entityManager;
-    private UserDaoInt userDaoInt;
-
 
 
     public List<User> getUser() {

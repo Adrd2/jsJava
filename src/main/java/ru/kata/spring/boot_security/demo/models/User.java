@@ -21,9 +21,23 @@ public class User implements UserDetails {
     @Column(name = "lastname") // без @Column будет поиск столбца last_name из-за регистра - N
     private String lastName;
 
+    private String email;
+
     private int age;
 
     private String password;
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
@@ -123,12 +137,13 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(String password, int id, String name, String lastName, int age) {
+    public User(String password, int id, String name, String lastName, int age, String email) {
         this.password = password;
         this.id = id;
         this.username = name;
         this.lastName = lastName;
         this.age = age;
+        this.email = email;
     }
 
     @Override
