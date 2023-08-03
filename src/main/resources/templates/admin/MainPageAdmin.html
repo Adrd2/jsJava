@@ -98,11 +98,12 @@
 
                                             <td>
 
-                                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal">
+                                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal"
+                                                        th:data-bs-target="${'#editModal'+user.id}">
                                                     Edit
                                                 </button>
 
-                                                <div class="modal fade" th:id="editModal"  aria-labelledby="editModalLabel" aria-hidden="true">
+                                                <div class="modal fade" th:id="${'editModal'+user.id}"  aria-labelledby="editModalLabel" aria-hidden="true">
                                                     <div class="modal-dialog" modal-dialog-centered>
                                                         <div class="modal-content">
                                                             <div class="modal-header">
