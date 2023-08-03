@@ -98,7 +98,8 @@
 
                                             <td>
 
-                                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal"
+                                                <button type="button" class="btn btn-primary" data-toggle="modal"
+                                                        data-target="#editModal"
                                                         th:data-bs-target="'#editModal' + ${user.id}">
                                                     Edit
                                                 </button>
@@ -108,12 +109,12 @@
                                             <td>
                                                 <a type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal"
                                                    data-bs-target="#DELETE"
-                                                   th:data-bs-target="${'#DELETE'+user.id}">Delete</a>
+                                                   th:data-bs-target="'#DELETE' + ${user.id}">Delete</a>
                                             </td>
 
 
-
-                                            <div class="modal fade" th:id="'#editModal' + ${user.id}"  aria-labelledby="editModalLabel" aria-hidden="true">
+                                            <div class="modal fade" th:id="'editModal' + ${user.id}"
+                                                 aria-labelledby="editModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-centered">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
@@ -121,10 +122,11 @@
                                                             <button type="button" class="btn-close"
                                                                     data-bs-dismiss="modal"
                                                                     aria-label="Close"></button>
+
                                                         </div>
                                                         <div class="modal-body col-md text-center">
-                                                        <form th:action="@{/{id}/update(id=${user.id})}"
-                                                              th:object="${user}" th:method="PUT">
+                                                            <form th:action="@{/{id}/update(id=${user.id})}"
+                                                                  th:object="${user}" th:method="PUT">
 
                                                                 <br>
                                                                 <label for="name0"><b>Name</b></label>
@@ -163,23 +165,22 @@
                                                                     </option>
                                                                 </select>
                                                                 <br><br>
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="submit" class="btn btn-primary">
-                                                                    Edit
-                                                                </button>
-                                                                <button type="button" class="btn btn-secondary"
-                                                                        data-bs-dismiss="modal">Close
-                                                                </button>
-                                                            </div>
-                                                        </form>
+                                                                <div class="modal-footer">
+                                                                    <button type="submit" class="btn btn-primary">
+                                                                        Edit
+                                                                    </button>
+                                                                    <button type="button" class="btn btn-secondary"
+                                                                            data-bs-dismiss="modal">Close
+                                                                    </button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
 
 
-
-                                            <div class="modal fade" th:id="${'DELETE'+user.id}"
+                                            <div class="modal fade" th:id="'DELETE' + ${user.id}"
                                                  aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog" role="document">
                                                     <div class="modal-content">
