@@ -23,16 +23,16 @@ public class DBInit {
 
     @PostConstruct
     private void dataBaseInit() {
-        Roles roleAdmin = new Roles("ROLE_admin");
-        Roles roleUser = new Roles("ROLE_user");
-        Set<Roles> adminSet = new HashSet<>();
-        Set<Roles> userSet = new HashSet<>();
-
-        roleService.addRole(roleAdmin);
-        roleService.addRole(roleUser);
-
-        adminSet.add(roleAdmin);
-        adminSet.add(roleUser);
-        userSet.add(roleUser);
+//        Roles roleAdmin = new Roles("ROLE_admin");
+//        Roles roleUser = new Roles("ROLE_user");
+//        Set<Roles> adminSet = new HashSet<>();
+//        Set<Roles> userSet = new HashSet<>();
+//
+//        roleService.addRole(roleAdmin);
+//        roleService.addRole(roleUser);
+//
+//        adminSet.add(roleAdmin);
+//        adminSet.add(roleUser);
+//        userSet.add(roleUser);
     }
 }

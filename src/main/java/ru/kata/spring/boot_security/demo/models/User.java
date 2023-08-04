@@ -169,5 +169,4 @@ public class User implements UserDetails {
                 "role" + getRoles();
     }
 
-
 }
