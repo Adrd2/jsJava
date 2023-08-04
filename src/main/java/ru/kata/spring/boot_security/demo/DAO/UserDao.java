@@ -59,4 +59,11 @@ public class UserDao {
                 .setMaxResults(1)
                 .getSingleResult();
     }
+
+    public User getUserByEmail(String email) {
+        return entityManager.createQuery("SELECT u FROM User u WHERE u.email = :email", User.class)
+                .setParameter("email", email)
+                .setMaxResults(1)
+                .getSingleResult();
+    }
 }

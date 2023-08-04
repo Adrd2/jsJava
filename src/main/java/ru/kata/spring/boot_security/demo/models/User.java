@@ -39,7 +39,7 @@ public class User implements UserDetails {
         this.email = email;
     }
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "usersRoles"
             , joinColumns = @JoinColumn(name = "users_id")

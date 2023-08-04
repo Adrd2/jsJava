@@ -24,7 +24,11 @@
         <p class="navbar-brand text-white">
             <b><span class="align-middle" th:text="${user.email}"></span></b>
             <span class="align-middle">with roles:</span>
-            <span class="align-middle" th:text="${user.roles}"></span>
+            <span class="align-middle">
+                <th:block th:each="role : ${user.getRoles()}">
+                                                    <span th:text="${role.authority.replaceFirst('ROLE_', '')}"></span>
+                                                </th:block>
+            </span>
         </p>
         <form th:action="@{/logout}" method="post">
             <button type="submit" class="btn btn-dark text-secondary">Logout</button>
