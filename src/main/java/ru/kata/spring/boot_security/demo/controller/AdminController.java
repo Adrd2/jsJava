@@ -7,8 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.models.User;
-import ru.kata.spring.boot_security.demo.service.RolesService;
-import ru.kata.spring.boot_security.demo.service.UserService;
+import ru.kata.spring.boot_security.demo.service.RolesServiceImpl;
+import ru.kata.spring.boot_security.demo.service.UserServiceImpl;
 
 import java.util.stream.Collectors;
 
@@ -18,28 +18,28 @@ import java.util.stream.Collectors;
 public class AdminController {
 
 
-    private final UserService userService;
-    private final RolesService rolesService;
+    private final UserServiceImpl userServiceImpl;
+    private final RolesServiceImpl rolesServiceImpl;
 
     @Autowired
-    public AdminController(UserService userService, RolesService rolesService) {
-        this.userService = userService;
-        this.rolesService = rolesService;
+    public AdminController(UserServiceImpl userServiceImpl, RolesServiceImpl rolesServiceImpl) {
+        this.userServiceImpl = userServiceImpl;
+        this.rolesServiceImpl = rolesServiceImpl;
     }
 
     @GetMapping(value = "/admin")
     public String adminPage(@AuthenticationPrincipal User user, Model modelmap) {
         modelmap.addAttribute("user", user);
-        modelmap.addAttribute("roles", rolesService.listAllRoles());
-        modelmap.addAttribute("users", userService.getUserList());
+        modelmap.addAttribute("roles", rolesServiceImpl.listAllRoles());
+        modelmap.addAttribute("users", userServiceImpl.getUserList());
         return "admin/MainPageAdmin";
     }
 
     @GetMapping("/add")
-    public String newUserPage(@AuthenticationPrincipal User user,Model modelMap) {
+    public String newUserPage(@AuthenticationPrincipal User user, Model modelMap) {
         System.out.println("Новый юзер вызов");
         modelMap.addAttribute("user", user);
-        modelMap.addAttribute("roles", rolesService.listAllRoles());
+        modelMap.addAttribute("roles", rolesServiceImpl.listAllRoles());
         return "admin/newUser";
     }
 
@@ -47,27 +47,27 @@ public class AdminController {
     @PostMapping("/new")
     public String createUser(@ModelAttribute("user") User user) {
         getUserRoles(user);
-        userService.save(user);
+        userServiceImpl.save(user);
         return "redirect:/admin";
     }
 
     @PutMapping("/{id}/update")
     public String update(@ModelAttribute("user") User user, Model model) {
-        model.addAttribute("roles", rolesService.listAllRoles());
+        model.addAttribute("roles", rolesServiceImpl.listAllRoles());
         getUserRoles(user);
-        userService.updateForAdmin(user);
+        userServiceImpl.update(user);
         return "redirect:/admin";
     }
 
     @DeleteMapping("/{id}/delete")
     public String delete(@PathVariable("id") Long id) {
-        userService.delete(id);
+        userServiceImpl.delete(id);
         return "redirect:/admin/";
     }
 
     private void getUserRoles(User user) {
         user.setRoles(user.getRoles().stream()
-                .map(role -> rolesService.getRole(role.getUserRole()))
+                .map(role -> rolesServiceImpl.getRole(role.getUserRole()))
                 .collect(Collectors.toSet()));
     }
 

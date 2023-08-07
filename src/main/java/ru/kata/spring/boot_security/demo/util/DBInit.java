@@ -2,22 +2,19 @@ package ru.kata.spring.boot_security.demo.util;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.kata.spring.boot_security.demo.models.Roles;
-import ru.kata.spring.boot_security.demo.service.RolesService;
-import ru.kata.spring.boot_security.demo.service.UserService;
+import ru.kata.spring.boot_security.demo.service.RolesServiceImpl;
+import ru.kata.spring.boot_security.demo.service.UserServiceImpl;
 
 import javax.annotation.PostConstruct;
-import java.util.HashSet;
-import java.util.Set;
 
 @Component
 public class DBInit {
-    private final UserService userService;
-    private final RolesService roleService;
+    private final UserServiceImpl userServiceImpl;
+    private final RolesServiceImpl roleService;
 
     @Autowired
-    public DBInit(UserService userService, RolesService roleService) {
-        this.userService = userService;
+    public DBInit(UserServiceImpl userServiceImpl, RolesServiceImpl roleService) {
+        this.userServiceImpl = userServiceImpl;
         this.roleService = roleService;
     }
 

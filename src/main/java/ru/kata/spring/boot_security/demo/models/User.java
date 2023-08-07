@@ -47,13 +47,6 @@ public class User implements UserDetails {
     )
     private Set<Roles> roles;
 
-    public void AddRolesToUser(Set<Roles> role) {
-        if (roles == null) {
-            roles = new HashSet<>();
-        }
-        roles.addAll(role);
-        System.out.println(roles.toString() + " ROLES IN ADD ROLES TO USER ");
-    }
 
     public Set<Roles> getRoles() {
         System.out.println("getroles = " + roles);
@@ -152,21 +145,6 @@ public class User implements UserDetails {
                 ", name " + username
                 + " " + lastName +
                 "age - " + age;
-    }
-
-    public String getFullName() {
-        return username + " " + lastName;
-    }
-
-    public String showByID() {
-        return "This user number " + id + " is " + username + " " + lastName + ", " + age + " years old";
-    }
-
-    public String showByName() {
-        return "Name: " + username + lastName + ", '\'" +
-                "age" + age + ", '\'" +
-                "password" + password + ", '\'" +
-                "role" + getRoles();
     }
 
 }

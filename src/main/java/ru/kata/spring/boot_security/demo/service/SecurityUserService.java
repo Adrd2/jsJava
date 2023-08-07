@@ -4,18 +4,15 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import ru.kata.spring.boot_security.demo.DAO.UserDao;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.repository.UsersRepository;
 
 
 @Service
 public class SecurityUserService implements UserDetailsService {
-    private final UserDao userDao;
     private final UsersRepository usersRepository;
 
-    public SecurityUserService(UserDao userDao, UsersRepository usersRepository) {
-        this.userDao = userDao;
+    public SecurityUserService(UsersRepository usersRepository) {
         this.usersRepository = usersRepository;
     }
 
