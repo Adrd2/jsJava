@@ -28,6 +28,7 @@ public class UserServiceImpl implements UserService {
     }
 
 
+
     public void save(User user) {
         if (user.getId() == 0) {
             user.setPassword(user.getPassword());

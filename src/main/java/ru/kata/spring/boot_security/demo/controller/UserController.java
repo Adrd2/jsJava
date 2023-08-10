@@ -1,23 +1,31 @@
 package ru.kata.spring.boot_security.demo.controller;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import ru.kata.spring.boot_security.demo.models.User;
+import ru.kata.spring.boot_security.demo.service.UserServiceImpl;
 
-@Controller
-@RequestMapping("/")
+@RestController
+@RequestMapping()
 public class UserController {
 
-    @GetMapping(value = "login")
+    private final UserServiceImpl userService;
+
+    public UserController(UserServiceImpl userService) {
+        this.userService = userService;
+    }
+
+    @GetMapping(value = "/login")
     public String loginPage() {
         return "users/login";
     }
 
-    @GetMapping("user")
-    public String showUserInfo(@AuthenticationPrincipal User user, Model model) {
-        model.addAttribute("user", user);
-        return "users/MainPageUser";
+    @GetMapping("/user")
+    public ResponseEntity<User> showUserInfo(@AuthenticationPrincipal User usercom) {
+        User user = userService.findUserById(usercom.getId());
+        return ResponseEntity.ok(user);
     }
 }
