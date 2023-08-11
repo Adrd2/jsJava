@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function fetchAndFillUserData() {
-    fetch('/api/users') // Вместо '/user' используйте '/api/users'
+    fetch('/api/admin')
         .then(response => response.json())
         .then(users => {
             // Очищаем таблицу перед заполнением
@@ -19,7 +19,6 @@ function fetchAndFillUserData() {
             console.error('Error:', error);
         });
 }
-
 // Функция для создания строки таблицы
 function createTableRow(user) {
     const row = document.createElement('tr');
