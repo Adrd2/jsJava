@@ -30,51 +30,6 @@ public class AdminController {
         this.rolesServiceImpl = rolesServiceImpl;
     }
 
-//    @GetMapping(value = "/admin")
-//    public String adminPage(@AuthenticationPrincipal User user, Model modelmap) {
-//        modelmap.addAttribute("user", user);
-//        modelmap.addAttribute("roles", rolesServiceImpl.listAllRoles());
-//        modelmap.addAttribute("users", userServiceImpl.getUserList());
-//        return "admin/MainPageAdmin";
-//    }
-
-
-
-//    @GetMapping("/add")
-//    public String newUserPage(@AuthenticationPrincipal User user, Model modelMap) {
-//        modelMap.addAttribute("user", user);
-//        modelMap.addAttribute("roles", rolesServiceImpl.listAllRoles());
-//        return "admin/newUser";
-//    }
-
-
-//    @PostMapping("/new")
-//    public String createUser(@ModelAttribute("user") User user) {
-//        getUserRoles(user);
-//        userServiceImpl.save(user);
-//        return "redirect:/admin";
-//    }
-
-//    @PutMapping("/{id}/update")
-//    public String update(@ModelAttribute("user") User user, Model model) {
-//        model.addAttribute("roles", rolesServiceImpl.listAllRoles());
-//        getUserRoles(user);
-//        userServiceImpl.update(user);
-//        return "redirect:/admin";
-//    }
-
-//    @DeleteMapping("/{id}/delete")
-//    public String delete(@PathVariable("id") Long id) {
-//        userServiceImpl.delete(id);
-//        return "redirect:/admin/";
-//    }
-
-
-
-
-
-    /////////////////////// REST API ///////////////////////
-
     @GetMapping("/admin")
     public ResponseEntity<?> adminPage(@AuthenticationPrincipal User user) {
         return new ResponseEntity<>(userServiceImpl.getUserList(), HttpStatus.OK);

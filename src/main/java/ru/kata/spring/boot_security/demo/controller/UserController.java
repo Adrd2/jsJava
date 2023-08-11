@@ -5,6 +5,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.service.UserServiceImpl;
 
@@ -23,9 +24,11 @@ public class UserController {
         return "users/login";
     }
 
-    @GetMapping("/user")
-    public ResponseEntity<User> showUserInfo(@AuthenticationPrincipal User usercom) {
+    @GetMapping("user")
+    public ModelAndView showUserInfo(@AuthenticationPrincipal User usercom) {
         User user = userService.findUserById(usercom.getId());
-        return ResponseEntity.ok(user);
+        ModelAndView modelAndView = new ModelAndView("users/MainPageUser");
+        modelAndView.addObject("user", user);
+        return modelAndView;
     }
 }

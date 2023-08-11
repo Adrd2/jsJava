@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('user-email').innerText = user.email;
             document.getElementById('user-roles').innerText = user.roles.map(role => role.replace('ROLE_', '')).join(', ');
 
-            // Здесь будут вставляться данные из JavaScript
+            // Заполняем данные в navbar
             document.getElementById('navbar-user-email').innerText = user.email;
             document.getElementById('navbar-user-roles').innerText = user.roles.map(role => role.replace('ROLE_', '')).join(', ');
         })
