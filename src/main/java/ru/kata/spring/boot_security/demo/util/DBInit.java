@@ -1,35 +1,34 @@
 package ru.kata.spring.boot_security.demo.util;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.kata.spring.boot_security.demo.models.Roles;
+import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.service.RolesServiceImpl;
 import ru.kata.spring.boot_security.demo.service.UserServiceImpl;
 
 import javax.annotation.PostConstruct;
+import java.util.Set;
 
 @Component
 public class DBInit {
-    private final UserServiceImpl userServiceImpl;
+    private final UserServiceImpl userService;
     private final RolesServiceImpl roleService;
 
-    @Autowired
-    public DBInit(UserServiceImpl userServiceImpl, RolesServiceImpl roleService) {
-        this.userServiceImpl = userServiceImpl;
+    public DBInit(UserServiceImpl userService, RolesServiceImpl roleService) {
+        this.userService = userService;
         this.roleService = roleService;
     }
 
     @PostConstruct
-    private void dataBaseInit() {
-//        Roles roleAdmin = new Roles("ROLE_admin");
-//        Roles roleUser = new Roles("ROLE_user");
-//        Set<Roles> adminSet = new HashSet<>();
-//        Set<Roles> userSet = new HashSet<>();
-//
-//        roleService.addRole(roleAdmin);
-//        roleService.addRole(roleUser);
-//
-//        adminSet.add(roleAdmin);
-//        adminSet.add(roleUser);
-//        userSet.add(roleUser);
+    private void postConstruct() {
+        Roles roleAdmin = new Roles("ROLE_admin");
+        Roles roleUser = new Roles("ROLE_user");
+        roleService.saveRole(roleAdmin);
+        roleService.saveRole(roleUser);
+
+        User user = new User("123", 1, "user", "userov", 20, "user@mail.ru", Set.of(roleUser));
+        User admin = new User("123", 2, "admin", "adminov", 30, "email@mail.ru", Set.of(roleAdmin));
+        userService.save(user);
+        userService.save(admin);
     }
 }

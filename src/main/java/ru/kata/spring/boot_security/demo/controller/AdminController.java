@@ -1,73 +1,57 @@
 package ru.kata.spring.boot_security.demo.controller;
 
-
-import org.springframework.beans.factory.annotation.Autowired;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
 import org.springframework.web.servlet.ModelAndView;
 import ru.kata.spring.boot_security.demo.models.User;
-import ru.kata.spring.boot_security.demo.service.RolesServiceImpl;
+import ru.kata.spring.boot_security.demo.service.UserService;
 import ru.kata.spring.boot_security.demo.service.UserServiceImpl;
 
-import javax.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/admin")
+@CrossOrigin
 public class AdminController {
 
-
-    private final UserServiceImpl userServiceImpl;
-    private final RolesServiceImpl rolesServiceImpl;
-
-    @Autowired
-    public AdminController(UserServiceImpl userServiceImpl, RolesServiceImpl rolesServiceImpl) {
-        this.userServiceImpl = userServiceImpl;
-        this.rolesServiceImpl = rolesServiceImpl;
+    private final UserServiceImpl userService;
+    public AdminController(UserServiceImpl userService) {
+        this.userService = userService;
     }
-
-    @GetMapping("/admin")
-    public ResponseEntity<List<User>> getUsers() {
-        return new ResponseEntity<>(userServiceImpl.getUserList(),HttpStatus.OK);
-    }
-
-    @PostMapping("/new")
-    public ResponseEntity<Exception> createUser(@RequestBody User user) {
-            userServiceImpl.save(user);
-            return new ResponseEntity<>(new Exception("User saved"), HttpStatus.OK);
-    }
-
-    @DeleteMapping("/{id}/delete")
-    public ResponseEntity<?> delete(@PathVariable("id") Long id) {
-        userServiceImpl.delete(id);
-        return ResponseEntity.ok("User deleted");
+    @GetMapping("/users")
+    public ResponseEntity<List<User>> showAllUsers() {
+        List<User> users = userService.getUserList();
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
 
-    @PutMapping("/{id}/update")
-    public ResponseEntity<?> update(@PathVariable("id") Long id, @RequestBody User user) {
-                userServiceImpl.save(user);
-            return new ResponseEntity<>(HttpStatus.OK);
+    @GetMapping("/users/{id}")
+    public ResponseEntity<User> getOneUser(@PathVariable("id") Long id) {
+        User user = userService.findUserById(id);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-
-    @GetMapping("/add")
-    public String newUserPage(@AuthenticationPrincipal User user, Model modelMap) {
-        modelMap.addAttribute("user", user);
-        modelMap.addAttribute("roles", rolesServiceImpl.listAllRoles());
-        return "admin/newUser"; // Это имя шаблона для HTML страницы
+    @PostMapping("/users")
+    public ResponseEntity<HttpStatus> addUser(@RequestBody User user) {
+        userService.save(user);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    private void getUserRoles(User user) {
-        user.setRoles(user.getRoles().stream()
-                .map(role -> rolesServiceImpl.getRole(role.getUserRole()))
-                .collect(Collectors.toSet()));
+    @DeleteMapping(value = "/users/{id}")
+    public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") Long id) {
+        userService.delete(id);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
+    @PatchMapping(value = "/users/{id}")
+    public ResponseEntity<HttpStatus> updateUser(@RequestBody User user, @PathVariable("id") Long id) {
+        userService.update(user);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
