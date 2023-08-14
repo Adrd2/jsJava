@@ -22,23 +22,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findUserById(long id) {
+    public User findUserById(long id) { // Метод findUserById(long id) - возвращает null , если юзера не найдет
+                                        // По логике программы метод не может попасть на несуществующего юзера
         Optional<User> foundUser = usersRepository.findById(id);
         return foundUser.orElse(null);
     }
 
 
 
-    public void save(User user) {
-        if (user.getId() == 0) {
-            user.setPassword(user.getPassword());
-        } else {
-            if (user.getPassword().equals("")) {
-                user.setPassword(findUserById(user.getId()).getPassword());
-            } else {
-                user.setPassword(user.getPassword());
-            }
-        }
+    public void save(User user) { // в предыдущем случае замудрил описывая невозможное по логике программы исключение
         usersRepository.save(user);
     }
 
