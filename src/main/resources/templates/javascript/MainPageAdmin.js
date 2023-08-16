@@ -154,7 +154,7 @@ async function addNewUser(event) {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            firstName: form_new.firstName.value,
+            firstName: form_new.username.value,
             lastName: form_new.lastName.value,
             age: form_new.age.value,
             username: form_new.username.value,
@@ -265,10 +265,10 @@ async function deleteUser() {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            firstName: form_del.firstName.value,
+            firstName: form_del.username.value,
             lastName: form_del.lastName.value,
             age: form_del.age.value,
-            username: form_del.username.value,
+            username: form_del.email.value,
             password: form_del.password.value
         })
     }
